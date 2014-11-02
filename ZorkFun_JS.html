@@ -157,6 +157,8 @@ function interpret()
   ******************************/
    
   scene = scene.substring(7);
+  
+  document.getElementById("display").innerHTML = scene;
 
   var cmdIndex = commandPass.indexOf(' '); //read up to frist space for command name
   action = commandPass.substring(0,cmdIndex); //keep command name
