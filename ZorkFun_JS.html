@@ -1,37 +1,117 @@
-#include <avr/pgmspace.h>
+<!--ZorkFun -->
+<!--*****************************************
+    
+    ***************************************** -->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Search</title>
+    <script src="Scripts/jquery-1.7.1.min.js"></script>
+    <link href="Content/Site.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="content">
+        <style>
+</style>
+        <div id="screenContainer">
+            <div id="display">
+                <div id="input">
+                    <form>
+                        <!--Screen Title-->
+                        <h1>ZorkFun
+                        </h1>
+                        <!--Screen Sub-Title-->
+                        <h3>The RTFMTastic Text-Based Adventure Game
+                        </h3>
+                        <div id="GameOverDiv">
+                        </div>
+                        <div id="GameDiv">
+                            <!--The following div is hidden or shown depending on if its a non-mobile browser-->
+                            <div id="Keyboard">
+                                <label>Command:</label>
+                                <input type="text" name="userInput" class="buttonMod" id="userInput" />
+                            </div>
+                            <!--The following div is hidden or shown depending on if its a mobile browser-->
+                            <div id="controllers">
+                                <!--We use a table for the simple alignment of the buttons-->
+                                <table>
+                                    <tr>
+                                        <td></td>
+                                        <td>
+                                            <input type='button' class='button' value='N' title="North" style="left: 200px" /></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <input type='button' class='button' value='W' title="West" /></td>
+                                        <td></td>
+                                        <td>
+                                            <input type='button' class='button' value='E' title="East" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td>
+                                            <input type='button' class='button' value='S' title="South" /></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <input type='button' class='button' value='P' title="Pickup" /></td>
+                                        <td>
+                                            <input type='button' class='button' value='A' title="About" /></td>
+                                        <td>
+                                            <input type='button' class='button' value='?' title="Help" /></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            </div>
+                            <div id="output"></div>
+                    </form>
+                    </div>
+                </div>
+            </div>
+</body>
+</html>
+
+<script type="text/javascript">
+    //main js code called by Jquery on doc ready
+    $(document).ready(function () {
 
 /*********************************
 These are the scenes for the game
-they're stored and retrieved from
-program memory to avoid SRAM bugs
 *********************************/
-prog_char a[] PROGMEM = "0010zzzThis room contains IKEA   desks and Apple computers.This must be Marketing andcommunications. Sweet!";
-prog_char b[] PROGMEM = "0010EzzYou find yourself standingin Nate's office. His pen is laying on the desk but He's nowhere to be found.";
-prog_char c[] PROGMEM = "0010AzzThe dark room is the IT   Den. No one is around at  the moment. You step on a Keycard that someone has dropped";
-prog_char d[] PROGMEM = "1111zzzThis room doesn't exist.  Are you the one? Neo?"; //NonRoom
-prog_char e[] PROGMEM = "0010zzzThis appears to be the    Customer Service office   Gordon is in the middle ofa joke. FOB is on the     phone.";
-prog_char f[] PROGMEM = "1110zzzThis is the end of the    hallway. There's a door tothe North and the hall    continues around the      corner.";
-prog_char g[] PROGMEM = "1101zzzYou're standing in a hall-way. There's a door to theNorth.";
-prog_char h[] PROGMEM = "1101zzzYou're standing in front  of a set of restrooms. Theroom to your North is dark";
-prog_char i[] PROGMEM = "0111zzzThere's nothing much goingon in this hallway. The   door in front of you has  a sign indicating it's    broken.";
-prog_char j[] PROGMEM = "1001zzzThis is the Tech Support  office. Single T is on thephone and Toni_K is tryingto fix a code bug.";
-prog_char k[] PROGMEM = "1110HAAYou're in an entryway witha shaded atrium to your   West. To your East is a   door with a card reader.";
-prog_char l[] PROGMEM = "0001BzzYou scan your card and    enter the server room.You notice a Pintglass on the ground. The room hums with rack fans.";
-prog_char m[] PROGMEM = "0100zDDYou find yourself in the  Catalog Control office.   NPoole tells you he could stop the robots if he had a Redboard.";
-prog_char n[] PROGMEM = "1111JzzYou're standing in an     entryway with an atrium toyou're East. It looks likethe door has a lock on the outside.";
-prog_char o[] PROGMEM = "0001zzzYou walk through the door into a sun-lit atrium.    There are bikes on the    wall below.";
-prog_char p[] PROGMEM = "1110zzzYou walk into an empty    hallway. There's a door toyour East";
-prog_char q[] PROGMEM = "0001zzzYou open the door and findyourself faced with a rockclimbing wall. This is the'gun factory' workout room";
-prog_char r[] PROGMEM = "0110ICCYou're in the classroom.  There's an unfinished SFE RedBoard microcontroller  on one of the tables.";
-prog_char s[] PROGMEM = "1111zzzYou're standing in a hall-way. There's a door to theWest";
-prog_char t[] PROGMEM = "0001FGGThis is the Engineering   bullpen. You meet Pete    Dokter who is wearing a   kilt and Soldering at a   workbench.";
-prog_char u[] PROGMEM = "1100zBBYou're standing in the    breakroom, there is a pingpong table and a kegeratorThere's a hallway to your North and East.";
-prog_char v[] PROGMEM = "0101zzzYou're looking at a wall  of employee pictures.Thereare 130 or so (wow.)";
-prog_char w[] PROGMEM = "1101zzzThe restroom doors aren't very interesting,but thereis a door to your North.";
-prog_char x[] PROGMEM = "1101zzzThe Entryway here is quietThere's a GPS Clock on thewall. The conference room to the East is labeled    'Rick James'";
-prog_char y[] PROGMEM = "0001zzzYou're standing in the    Rick James conference rooma large window overlooks alight flooded atrium.";
+var a = "0010zzzThis room contains IKEA   desks and Apple computers.This must be Marketing andcommunications. Sweet!";
+var b = "0010EzzYou find yourself standingin Nate's office. His pen is laying on the desk but He's nowhere to be found.";
+var c = "0010AzzThe dark room is the IT   Den. No one is around at  the moment. You step on a Keycard that someone has dropped";
+var d = "1111zzzThis room doesn't exist.  Are you the one? Neo?"; //NonRoom
+var e = "0010zzzThis appears to be the    Customer Service office   Gordon is in the middle ofa joke. FOB is on the     phone.";
+var f = "1110zzzThis is the end of the    hallway. There's a door tothe North and the hall    continues around the      corner.";
+var g = "1101zzzYou're standing in a hall-way. There's a door to theNorth.";
+var h = "1101zzzYou're standing in front  of a set of restrooms. Theroom to your North is dark";
+var i = "0111zzzThere's nothing much goingon in this hallway. The   door in front of you has  a sign indicating it's    broken.";
+var j = "1001zzzThis is the Tech Support  office. Single T is on thephone and Toni_K is tryingto fix a code bug.";
+var k = "1110HAAYou're in an entryway witha shaded atrium to your   West. To your East is a   door with a card reader.";
+var l = "0001BzzYou scan your card and    enter the server room.You notice a Pintglass on the ground. The room hums with rack fans.";
+var m = "0100zDDYou find yourself in the  Catalog Control office.   NPoole tells you he could stop the robots if he had a Redboard.";
+var n = "1111JzzYou're standing in an     entryway with an atrium toyou're East. It looks likethe door has a lock on the outside.";
+var o = "0001zzzYou walk through the door into a sun-lit atrium.    There are bikes on the    wall below.";
+var p = "1110zzzYou walk into an empty    hallway. There's a door toyour East";
+var q = "0001zzzYou open the door and findyourself faced with a rockclimbing wall. This is the'gun factory' workout room";
+var r = "0110ICCYou're in the classroom.  There's an unfinished SFE RedBoard microcontroller  on one of the tables.";
+var s = "1111zzzYou're standing in a hall-way. There's a door to theWest";
+var t = "0001FGGThis is the Engineering   bullpen. You meet Pete    Dokter who is wearing a   kilt and Soldering at a   workbench.";
+var u = "1100zBBYou're standing in the    breakroom, there is a pingpong table and a kegeratorThere's a hallway to your North and East.";
+var v = "0101zzzYou're looking at a wall  of employee pictures.Thereare 130 or so (wow.)";
+var w = "1101zzzThe restroom doors aren't very interesting,but thereis a door to your North.";
+var x = "1101zzzThe Entryway here is quietThere's a GPS Clock on thewall. The conference room to the East is labeled    'Rick James'";
+var y = "0001zzzYou're standing in the    Rick James conference rooma large window overlooks alight flooded atrium.";
 
-PROGMEM const char *scene_table[5][5] =// Scene lookup table
+var scene_table = new Array// Scene lookup table
 {   
   {a, b, c, d, e},
   {f, g, h, i, j},
@@ -42,45 +122,40 @@ PROGMEM const char *scene_table[5][5] =// Scene lookup table
 
 /*Some other in-game text with also be stored in PROGMEM... apparently.*/
 
-prog_char one[] PROGMEM = "You walk out into a sunlitAtrium. The door shuts andlocks behind you. You're  attacked by a robot and   die. Game Over.";
-prog_char two[] PROGMEM = "You swipe the key card and the door unlocks. You walk in.";
-prog_char three[] PROGMEM = "You pull a cool,refreshing draft from the tap.";
-prog_char four[] PROGMEM = "You repair the RedBoard   and take it with you."; //NonRoom
-prog_char five[] PROGMEM = "You and NPoole leave      torward the exit to stop  the robot apocolypse but  you're attacked.";
-prog_char six[] PROGMEM = "As the robot strikes down NPoole you remember the   pen on Nate's desk. The   robot wins. You die.";
-prog_char seven[] PROGMEM = "Luckily, you have a pen   which you throw at the    robot, thus disabling it. The human race lives on. You Win.";
-prog_char eight[] PROGMEM = "You hand Pete the cool and refreshing beer. He gives you the soldering iron.";
-prog_char nine[] PROGMEM = "";
+var one = "You walk out into a sunlitAtrium. The door shuts andlocks behind you. You're  attacked by a robot and   die. Game Over.";
+var two = "You swipe the key card and the door unlocks. You walk in.";
+var three = "You pull a cool,refreshing draft from the tap.";
+var four = "You repair the RedBoard   and take it with you."; //NonRoom
+var five = "You and NPoole leave      torward the exit to stop  the robot apocolypse but  you're attacked.";
+var six = "As the robot strikes down NPoole you remember the   pen on Nate's desk. The   robot wins. You die.";
+var seven = "Luckily, you have a pen   which you throw at the    robot, thus disabling it. The human race lives on. You Win.";
+var eight = "You hand Pete the cool and refreshing beer. He gives you the soldering iron.";
+var nine = "";
 
-PROGMEM const char *text_table[3][3] =// Scene lookup table
+var text_table = new Array// Scene lookup table
 {   
   {one,two,three},
   {four,five,six},
   {seven,eight,nine}
 };
 
-char buffer[150]; //PROGMEM BUFFER
-
-boolean wait = 1; //Input Flag
-String action; //First word from parser
-String object; //Second word from parser
-String commandPass; //Global dropbox for input
-
-String scene; //Scene string
-String text; //In-Game Text String
-int xco=4; //Coordinate space
-int yco=0;
-
-char ndir; //Move permissions
-char edir;
-char sdir;
-char wdir;
-
-char item; //Item present
-char u1; //Item use permission
-char u2; //Item effect code
-
-String inventory = "xxxxx"; //5 Item Inventory String
+var buffer, //LINE BUFFER
+wait = 1, //Input Flag
+action, //First word from parser
+object, //Second word from parser
+commandPass, //Global dropbox for input
+scene, //Scene string
+text, //In-Game Text String
+xco=4, //Coordinate space
+yco=0,
+ndir, //Move permissions
+edir,
+sdir,
+wdir,
+item, //Item present
+u1, //Item use permission
+u2, //Item effect code
+inventory = "xxxxx", //5 Item Inventory String
 
 void setup() {
 
@@ -385,3 +460,5 @@ void getText(int x, int y){
   text = String(buffer);
   return;
 }
+
+}};
