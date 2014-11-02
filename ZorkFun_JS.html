@@ -160,6 +160,8 @@ function interpret()
   
   document.getElementById("display").innerHTML = scene;
 
+  commandPass = document.getElementById("command").value;
+
   var cmdIndex = commandPass.indexOf(' '); //read up to frist space for command name
   action = commandPass.substring(0,cmdIndex); //keep command name
   object = commandPass.substring(cmdIndex); //the rest is the argument
