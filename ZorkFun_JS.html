@@ -21,31 +21,31 @@
 /*********************************
 These are the scenes for the game
 *********************************/
-var a = "0010zzzThis room contains IKEA   desks and Apple computers.This must be Marketing andcommunications. Sweet!";
-var b = "0010EzzYou find yourself standingin Nate's office. His pen is laying on the desk but He's nowhere to be found.";
-var c = "0010AzzThe dark room is the IT   Den. No one is around at  the moment. You step on a Keycard that someone has dropped";
-var d = "1111zzzThis room doesn't exist.  Are you the one? Neo?"; //NonRoom
-var e = "0010zzzThis appears to be the    Customer Service office   Gordon is in the middle ofa joke. FOB is on the     phone.";
-var f = "1110zzzThis is the end of the    hallway. There's a door tothe North and the hall    continues around the      corner.";
+var a = "0010zzzThis room contains IKEA desks and Apple computers.This must be Marketing andcommunications. Sweet!";
+var b = "0010EzzYou find yourself standing in Nate's office. His pen is laying on the desk but He's nowhere to be found.";
+var c = "0010AzzThe dark room is the IT Den. No one is around at the moment. You step on a Keycard that someone has dropped";
+var d = "1111zzzThis room doesn't exist. Are you the one? Neo?"; //NonRoom
+var e = "0010zzzThis appears to be the Customer Service office   Gordon is in the middle ofa joke. FOB is on the     phone.";
+var f = "1110zzzThis is the end of the hallway. There's a door tothe North and the hall continues around the corner.";
 var g = "1101zzzYou're standing in a hall-way. There's a door to theNorth.";
-var h = "1101zzzYou're standing in front  of a set of restrooms. Theroom to your North is dark";
-var i = "0111zzzThere's nothing much goingon in this hallway. The   door in front of you has  a sign indicating it's    broken.";
-var j = "1001zzzThis is the Tech Support  office. Single T is on thephone and Toni_K is tryingto fix a code bug.";
-var k = "1110HAAYou're in an entryway witha shaded atrium to your   West. To your East is a   door with a card reader.";
-var l = "0001BzzYou scan your card and    enter the server room.You notice a Pintglass on the ground. The room hums with rack fans.";
-var m = "0100zDDYou find yourself in the  Catalog Control office.   NPoole tells you he could stop the robots if he had a Redboard.";
-var n = "1111JzzYou're standing in an     entryway with an atrium toyou're East. It looks likethe door has a lock on the outside.";
-var o = "0001zzzYou walk through the door into a sun-lit atrium.    There are bikes on the    wall below.";
-var p = "1110zzzYou walk into an empty    hallway. There's a door toyour East";
-var q = "0001zzzYou open the door and findyourself faced with a rockclimbing wall. This is the'gun factory' workout room";
-var r = "0110ICCYou're in the classroom.  There's an unfinished SFE RedBoard microcontroller  on one of the tables.";
+var h = "1101zzzYou're standing in front of a set of restrooms. The room to your North is dark";
+var i = "0111zzzThere's nothing much going on in this hallway. The door in front of you has a sign indicating it's broken.";
+var j = "1001zzzThis is the Tech Support office. Single T is on thephone and Toni_K is tryingto fix a code bug.";
+var k = "1110HAAYou're in an entryway with a shaded atrium to your West. To your East is a door with a card reader.";
+var l = "0001BzzYou scan your card and enter the server room. You notice a Pintglass on the ground. The room hums with rack fans.";
+var m = "0100zDDYou find yourself in the Catalog Control office. NPoole tells you he could stop the robots if he had a Redboard.";
+var n = "1111JzzYou're standing in an entryway with an atrium to you're East. It looks likethe door has a lock on the outside.";
+var o = "0001zzzYou walk through the door into a sun-lit atrium. There are bikes on the wall below.";
+var p = "1110zzzYou walk into an empty hallway. There's a door to your East";
+var q = "0001zzzYou open the door and find yourself faced with a rockclimbing wall. This is the 'gun factory' workout room";
+var r = "0110ICCYou're in the classroom. There's an unfinished SFE RedBoard microcontroller on one of the tables.";
 var s = "1111zzzYou're standing in a hall-way. There's a door to theWest";
-var t = "0001FGGThis is the Engineering   bullpen. You meet Pete    Dokter who is wearing a   kilt and Soldering at a   workbench.";
-var u = "1100zBBYou're standing in the    breakroom, there is a pingpong table and a kegeratorThere's a hallway to your North and East.";
-var v = "0101zzzYou're looking at a wall  of employee pictures.Thereare 130 or so (wow.)";
-var w = "1101zzzThe restroom doors aren't very interesting,but thereis a door to your North.";
-var x = "1101zzzThe Entryway here is quietThere's a GPS Clock on thewall. The conference room to the East is labeled    'Rick James'";
-var y = "0001zzzYou're standing in the    Rick James conference rooma large window overlooks alight flooded atrium.";
+var t = "0001FGGThis is the Engineering bullpen. You meet Pete Dokter who is wearing a kilt and Soldering at a workbench.";
+var u = "1100zBBYou're standing in the breakroom, there is a pingpong table and a kegerator There's a hallway to your North and East.";
+var v = "0101zzzYou're looking at a wall of employee pictures. There are 150 or so (wow.)";
+var w = "1101zzzThe restroom doors aren't very interesting, but thereis a door to your North.";
+var x = "1101zzzThe Entryway here is quiet There's a GPS Clock on the wall. The conference room to the East is labeled 'Rick James'";
+var y = "0001zzzYou're standing in the Rick James conference room a large window overlooks a light flooded atrium.";
 
 var scene_table = new Array// Scene lookup table
 {   
@@ -58,13 +58,13 @@ var scene_table = new Array// Scene lookup table
 
 /*Some other in-game text with also be stored in PROGMEM... apparently.*/
 
-var one = "You walk out into a sunlitAtrium. The door shuts andlocks behind you. You're  attacked by a robot and   die. Game Over.";
+var one = "You walk out into a sunlit Atrium. The door shuts andlocks behind you. You're attacked by a robot and die. Game Over.";
 var two = "You swipe the key card and the door unlocks. You walk in.";
 var three = "You pull a cool,refreshing draft from the tap.";
-var four = "You repair the RedBoard   and take it with you."; //NonRoom
-var five = "You and NPoole leave      torward the exit to stop  the robot apocolypse but  you're attacked.";
-var six = "As the robot strikes down NPoole you remember the   pen on Nate's desk. The   robot wins. You die.";
-var seven = "Luckily, you have a pen   which you throw at the    robot, thus disabling it. The human race lives on. You Win.";
+var four = "You repair the RedBoard and take it with you."; //NonRoom
+var five = "You and NPoole leave torward the exit to stop the robot apocolypse but you're attacked.";
+var six = "As the robot strikes down NPoole you remember the pen on Nate's desk. The robot wins. You die.";
+var seven = "Luckily, you have a pen which you throw at the robot, thus disabling it. The human race lives on. You Win.";
 var eight = "You hand Pete the cool and refreshing beer. He gives you the soldering iron.";
 var nine = "";
 
@@ -100,14 +100,10 @@ inventory = "xxxxx", //5 Item Inventory String
 function interpret()
 {
   
-  lineFeed();
-  
-  int cmdIndex = commandPass.indexOf(' '); //read up to frist space for command name
-  action = commandPass.substring(0,cmdIndex); //keep command name
-  object = commandPass.substring(cmdIndex); //the rest is the argument
-  String argTest = commandPass.substring(cmdIndex, cmdIndex+1); //see if there is an argument
-
-
+  var cmdIndex = commandPass.indexOf(' '); //read up to frist space for command name
+  var action = commandPass.substring(0,cmdIndex); //keep command name
+  var object = commandPass.substring(cmdIndex); //the rest is the argument
+  var argTest = commandPass.substring(cmdIndex, cmdIndex+1); //see if there is an argument
 
 
 /*******************************
