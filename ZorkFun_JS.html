@@ -12,6 +12,8 @@
 <br>
 <input id="command" type="text">
 
+<button type="button" onclick="interpret()">Do</button>
+
 <script type="text/javascript">
     //main js code called by Jquery on doc ready
     $(document).ready(function () {
@@ -91,66 +93,11 @@ u1, //Item use permission
 u2, //Item effect code
 inventory = "xxxxx", //5 Item Inventory String
 
-  /******************************
-         MOVE PERMISSIONS
-    the first 4 characters are
-    always switches which tell
-    the motion engine whether
-    or not you can move in a 
-    certain direction.
-  ******************************/
-  
-  ndir = scene.charAt(0); 
-  edir = scene.charAt(1);
-  sdir = scene.charAt(2);
-  wdir = scene.charAt(3);
-  
-  /*****************************
-            ITEM FLAG  
-  the fifth character is always
-  a character which represents 
-  an object present in the room.
-  These are identified by the 
-  item parser. Items may also be
-  NPCs.
-  ******************************/
-  
-  item = scene.charAt(4);
-  
-  /******************************
-       ITEM USE AND EFFECT
-  the sixth and seventh character
-  represent the permission to use
-  an item in a particular location
-  and the effect lookup code that
-  is associated with that use.
-  ******************************/
-  
-  u1 = scene.charAt(5);
-  u2 = scene.charAt(6);
-  
-  /******************************
-            THE SCENE
-     the rest of the string is
-     the 'scene' or the text
-     displayed to the user
-     discribing the current
-     room.
-  ******************************/
-   
-  scene = scene.substring(7);
-  
-  Serial.print(scene); //show the scene 
-  lineFeed();
- 
-} 
-
-
 /*******************************
             Parser
 *******************************/
 
-void interpret()
+function interpret()
 {
   
   lineFeed();
@@ -218,6 +165,59 @@ void interpret()
     if(itemLookup(object)==u1){effectEngine(u2); delay(3000); return;}
   
    }
+   
+   getScene(xco, yco);
+   
+     /******************************
+         MOVE PERMISSIONS
+    the first 4 characters are
+    always switches which tell
+    the motion engine whether
+    or not you can move in a 
+    certain direction.
+  ******************************/
+  
+  ndir = scene.charAt(0); 
+  edir = scene.charAt(1);
+  sdir = scene.charAt(2);
+  wdir = scene.charAt(3);
+  
+  /*****************************
+            ITEM FLAG  
+  the fifth character is always
+  a character which represents 
+  an object present in the room.
+  These are identified by the 
+  item parser. Items may also be
+  NPCs.
+  ******************************/
+  
+  item = scene.charAt(4);
+  
+  /******************************
+       ITEM USE AND EFFECT
+  the sixth and seventh character
+  represent the permission to use
+  an item in a particular location
+  and the effect lookup code that
+  is associated with that use.
+  ******************************/
+  
+  u1 = scene.charAt(5);
+  u2 = scene.charAt(6);
+  
+  /******************************
+            THE SCENE
+     the rest of the string is
+     the 'scene' or the text
+     displayed to the user
+     discribing the current
+     room.
+  ******************************/
+   
+  scene = scene.substring(7);
+  
+
     }
   /*******************************
             THE BIG ELSE
@@ -238,7 +238,7 @@ void interpret()
          Scene Lookup
 *******************************/
 
-void getScene(int x, int y){
+function getScene(int x, int y){
   
   strcpy_P(buffer, (char*)pgm_read_word(&(scene_table[x][y])));
   scene = String(buffer);
@@ -266,7 +266,7 @@ char itemLookup(String obj){
          Effect Engine
 ********************************/
 
-void effectEngine(char effect){
+function effectEngine(char effect){
  
  switch(effect){
    
@@ -302,7 +302,7 @@ void effectEngine(char effect){
 /********************************
       In-Game Text Lookup
 ********************************/
-void getText(int x, int y){
+function getText(int x, int y){
   
   strcpy_P(buffer, (char*)pgm_read_word(&(text_table[x][y])));
   text = String(buffer);
