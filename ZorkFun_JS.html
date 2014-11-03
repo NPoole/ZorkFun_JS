@@ -4,81 +4,91 @@
     ***************************************** -->
 <!DOCTYPE html>
 <head>
+<meta charset="UTF-8">
     <title>ZorkFun</title>
 </head>
 <body>
-<p> Debug: </p>
-<BR>
-<button type="button" onclick="initialize()">Initialize Vars</button>
-<BR><BR>
 
 <p id="display"></p>
 <br>
 <input id="command" type="text">
 
-<button type="button" onclick="interpret()">Do</button>
+<button type="button" onclick="buttonHandler()">Do</button>
 
-<script type="text/javascript">
-    //main js code called by Jquery on doc ready
-    
-    function initialize() {
+<BR>
+<p id="result"></p>
+
+<script>
+
+/********************************
+     First, a convenience
+********************************/
+
+document.getElementById("command").addEventListener("keydown", function(e) {
+    if (!e) { var e = window.event; }
+    //e.preventDefault(); // sometimes useful
+
+    // Enter is pressed
+    if (e.keyCode == 13) { buttonHandler(); }
+}, false);
+
 
 /*********************************
 These are the scenes for the game
 *********************************/
-var a = "0010zzzThis room contains IKEA desks and Apple computers.This must be Marketing andcommunications. Sweet!";
+var a = "0010zzzThis room contains IKEA desks and Apple computers.This must be Marketing and communications. Sweet!";
 var b = "0010EzzYou find yourself standing in Nate's office. His pen is laying on the desk but He's nowhere to be found.";
 var c = "0010AzzThe dark room is the IT Den. No one is around at the moment. You step on a Keycard that someone has dropped";
 var d = "1111zzzThis room doesn't exist. Are you the one? Neo?"; //NonRoom
-var e = "0010zzzThis appears to be the Customer Service office   Gordon is in the middle ofa joke. FOB is on the     phone.";
-var f = "1110zzzThis is the end of the hallway. There's a door tothe North and the hall continues around the corner.";
-var g = "1101zzzYou're standing in a hall-way. There's a door to theNorth.";
+var e = "0010zzzThis appears to be the Customer Service office Gordon is in the middle of a joke. FOB is on the phone.";
+var f = "1110zzzThis is the end of the hallway. There's a door to the North and the hall continues around the corner.";
+var g = "1101zzzYou're standing in a hall-way. There's a door to the North.";
 var h = "1101zzzYou're standing in front of a set of restrooms. The room to your North is dark";
 var i = "0111zzzThere's nothing much going on in this hallway. The door in front of you has a sign indicating it's broken.";
-var j = "1001zzzThis is the Tech Support office. Single T is on thephone and Toni_K is tryingto fix a code bug.";
+var j = "1001zzzThis is the Tech Support office. Single T is on the phone and Toni_K is trying to fix a code bug.";
 var k = "1110HAAYou're in an entryway with a shaded atrium to your West. To your East is a door with a card reader.";
 var l = "0001BzzYou scan your card and enter the server room. You notice a Pintglass on the ground. The room hums with rack fans.";
 var m = "0100zDDYou find yourself in the Catalog Control office. NPoole tells you he could stop the robots if he had a Redboard.";
-var n = "1111JzzYou're standing in an entryway with an atrium to you're East. It looks likethe door has a lock on the outside.";
+var n = "1111JzzYou're standing in an entryway with an atrium to you're East. It looks like the door has a lock on the outside.";
 var o = "0001zzzYou walk through the door into a sun-lit atrium. There are bikes on the wall below.";
 var p = "1110zzzYou walk into an empty hallway. There's a door to your East";
 var q = "0001zzzYou open the door and find yourself faced with a rockclimbing wall. This is the 'gun factory' workout room";
 var r = "0110ICCYou're in the classroom. There's an unfinished SFE RedBoard microcontroller on one of the tables.";
-var s = "1111zzzYou're standing in a hall-way. There's a door to theWest";
+var s = "1111zzzYou're standing in a hall-way. There's a door to the West";
 var t = "0001FGGThis is the Engineering bullpen. You meet Pete Dokter who is wearing a kilt and Soldering at a workbench.";
 var u = "1100zBBYou're standing in the breakroom, there is a pingpong table and a kegerator There's a hallway to your North and East.";
 var v = "0101zzzYou're looking at a wall of employee pictures. There are 150 or so (wow.)";
-var w = "1101zzzThe restroom doors aren't very interesting, but thereis a door to your North.";
+var w = "1101zzzThe restroom doors aren't very interesting, but there is a door to your North.";
 var x = "1101zzzThe Entryway here is quiet There's a GPS Clock on the wall. The conference room to the East is labeled 'Rick James'";
 var y = "0001zzzYou're standing in the Rick James conference room a large window overlooks a light flooded atrium.";
 
-var scene_table = new Array// Scene lookup table
-{   
-  {a, b, c, d, e},
-  {f, g, h, i, j},
-  {k, l, m, n, o},
-  {p, q, r, s, t},
-  {u, v, w, x, y}
-};
+var scene_table = // Scene lookup table
+[   
+  [a, b, c, d, e],
+  [f, g, h, i, j],
+  [k, l, m, n, o],
+  [p, q, r, s, t],
+  [u, v, w, x, y]
+];
 
 /*Some other in-game text with also be stored in PROGMEM... apparently.*/
 
 var one = "You walk out into a sunlit Atrium. The door shuts andlocks behind you. You're attacked by a robot and die. Game Over.";
 var two = "You swipe the key card and the door unlocks. You walk in.";
-var three = "You pull a cool,refreshing draft from the tap.";
+var three = "You pull a cool, refreshing draft from the tap.";
 var four = "You repair the RedBoard and take it with you."; //NonRoom
 var five = "You and NPoole leave torward the exit to stop the robot apocolypse but you're attacked.";
-var six = "As the robot strikes down NPoole you remember the pen on Nate's desk. The robot wins. You die.";
-var seven = "Luckily, you have a pen which you throw at the robot, thus disabling it. The human race lives on. You Win.";
+var six = "You and NPoole leave torward the exit to stop the robot apocolypse but you're attacked. As the robot strikes down NPoole you remember the pen on Nate's desk. The robot wins. You die.";
+var seven = "You and NPoole leave torward the exit to stop the robot apocolypse but you're attacked. Luckily, you have a pen which you throw at the robot, thus disabling it. The human race lives on. You Win.";
 var eight = "You hand Pete the cool and refreshing beer. He gives you the soldering iron.";
 var nine = "";
 
-var text_table = new Array// Scene lookup table
-{   
-  {one,two,three},
-  {four,five,six},
-  {seven,eight,nine}
-};
+var text_table = // Scene lookup table
+[   
+  [one,two,three],
+  [four,five,six],
+  [seven,eight,nine]
+];
 
 var buffer, //LINE BUFFER
 wait = 1, //Input Flag
@@ -96,17 +106,39 @@ wdir,
 item, //Item present
 u1, //Item use permission
 u2, //Item effect code
-inventory = "xxxxx", //5 Item Inventory String
+inventory = "xxxxx" //5 Item Inventory String
+
+//intial scene_get
+
+  getScene(xco, yco);
+  ndir = scene.charAt(0); 
+  edir = scene.charAt(1);
+  sdir = scene.charAt(2);
+  wdir = scene.charAt(3);
+  item = scene.charAt(4);
+  u1 = scene.charAt(5);
+  u2 = scene.charAt(6);
+  scene = scene.substring(7);
+  document.getElementById("display").innerHTML = scene;
+
+/*******************************
+         Button Handler
+*******************************/
+
+function buttonHandler()
+{
+
+interpret();
+sceneUpdate();
 
 }
 
 /*******************************
-            Parser
+          Scene Update
 *******************************/
 
-function interpret()
+function sceneUpdate()
 {
-    
        getScene(xco, yco);
    
      /******************************
@@ -159,10 +191,18 @@ function interpret()
   scene = scene.substring(7);
   
   document.getElementById("display").innerHTML = scene;
+}
 
+/*******************************
+            Parser
+*******************************/
+
+function interpret()
+{
+    
   commandPass = document.getElementById("command").value;
 
-  var cmdIndex = commandPass.indexOf(' '); //read up to frist space for command name
+  var cmdIndex = commandPass.indexOf(' '); //read up to first space for command name
   action = commandPass.substring(0,cmdIndex); //keep command name
   object = commandPass.substring(cmdIndex); //the rest is the argument
   argTest = commandPass.substring(cmdIndex, cmdIndex+1); //see if there is an argument
@@ -176,52 +216,52 @@ function interpret()
 
 
   //"MOVE" ACTION
-  if(action=="move" /*|| action=="Move" || action=="MOVE"*/){
+  if(action=="move" || action=="Move" || action=="MOVE"){
     
-    if(/*object==" North" || */object==" north" ||/* object==" NORTH" || object==" N" ||*/ object==" n"){
-      if(ndir=='0'){document.getElementById("display").innerHTML = "I'm afraid you can't go North"; return;}
+    if(object==" North" || object==" north" || object==" NORTH" || object==" N" || object==" n"){
+      if(ndir=='0'){document.getElementById("result").innerHTML = "I'm afraid you can't go North"; return;}
       if(ndir=='1'){xco=xco-1; return;}}
 
-    if(/*object==" East" || */object==" east" || /*object==" EAST" || object==" E" ||*/ object==" e"){
-      if(item=='H'){document.getElementById("display").innerHTML = "You try the door but it's locked. There's a card reader."; return;}
-      if(edir=='0'){document.getElementById("display").innerHTML = "I'm afraid you can't go East"; return;}
+    if(object==" East" || object==" east" || object==" EAST" || object==" E" || object==" e"){
+      if(item=='H'){document.getElementById("result").innerHTML = "You try the door but it's locked. There's a card reader."; return;}
+      if(edir=='0'){document.getElementById("result").innerHTML = "I'm afraid you can't go East"; return;}
       if(edir=='1'){yco=yco+1; return;}}
 
-      if(/*object==" South" ||*/ object==" south" ||/* object==" SOUTH" || object==" S" ||*/ object==" s"){
-      if(sdir=='0'){document.getElementById("display").innerHTML = "I'm afraid you can't go South"; return;}
+    if(object==" South" || object==" south" || object==" SOUTH" || object==" S" || object==" s"){
+      if(sdir=='0'){document.getElementById("result").innerHTML = "I'm afraid you can't go South"; return;}
       if(sdir=='1'){xco=xco+1; return;}}
 
-    if(/*object==" West" || */object==" west" || /*object==" WEST" || object==" W" */ object==" w"){
-      if(item=='J'){ boolean match = 0;
-      for(int q=0; q<=4; q++){if(inventory.charAt(q)=='A'){match=1;}}
+    if(object==" West" || object==" west" || object==" WEST" || object==" W" || object==" w"){
+      if(item=='J'){var match = 0;
+      for(q=0; q<=4; q++){if(inventory.charAt(q)=='A'){match=1;}}
    
    if(match==1){yco=yco-1; return;}
    
-   if(match==0){getText(0,0); document.getElementById("display").innerHTML = text; escape();}}
-      if(wdir=='0'){document.getElementById("display").innerHTML = "I'm afraid you can't go West"; return;}
+   if(match==0){getText(0,0); document.getElementById("result").innerHTML = text; escape();}}
+      if(wdir=='0'){document.getElementById("result").innerHTML = "I'm afraid you can't go West"; return;}
       if(wdir=='1'){yco=yco-1; return;}}
 
-  document.getElementById("display").innerHTML = "That's not a direction I recognize.";
+  document.getElementById("result").innerHTML = "That's not a direction I recognize.";
   return;}
   
   //"TAKE" ACTION
-  if(/*action=="Get" || action=="GET" ||*/ action=="get" ||/* action=="Take" || action=="TAKE" ||*/ action=="take" ||/* action=="GRAB" || action=="Grab" ||*/ action=="grab"){
-  if(item=='F'){document.getElementById("display").innerHTML = "Pete says he'll trade you a beer for it."; return;}  
-  if(item=='I'){document.getElementById("display").innerHTML = "This is no good right now"); return;}  
-  if(itemLookup(object)==item){inventory.setCharAt(inventory.indexOf('x'), item); document.getElementById("display").innerHTML = "You grabbed the "; document.getElementById("display").innerHTML = object; document.getElementById("display").innerHTML = ". Nice."; return;}
-     else{document.getElementById("display").innerHTML = "I don't see a "; document.getElementById("display").innerHTML = object; document.getElementById("display").innerHTML = " worth taking. Do you?"; return;}}
+  if(action=="Get" || action=="GET" || action=="get" || action=="Take" || action=="TAKE" || action=="take" || action=="GRAB" || action=="Grab" || action=="grab"){
+  if(item=='F'){document.getElementById("result").innerHTML = "Pete says he'll trade you a beer for it."; return;}  
+  if(item=='I'){document.getElementById("result").innerHTML = "This is no good right now"; return;}  
+  if(itemLookup(object)==item){inventory = setCharAt(inventory, inventory.indexOf('x'), item); document.getElementById("result").innerHTML = "You grabbed the " + object + ". Nice."; return;}
+     else{document.getElementById("result").innerHTML = "I don't see a " + object + " worth taking. Do you?"; return;}}
      
   //"USE" ACTION
-  if(/*action=="Use" || action=="USE" ||*/ action=="use" || /*action=="Give" || */action=="give"/* || action=="GIVE"*/ ){
-     boolean match = 0;
+  if(action=="Use" || action=="USE" || action=="use" || action=="Give" || action=="give" || action=="GIVE" ){
+     var match = 0;
    
- for(int q=0; q<=4; q++){if(inventory.charAt(q)==itemLookup(object)){match=1;}}
+ for(q=0; q<=4; q++){if(inventory.charAt(q)==itemLookup(object)){match=1;}}
    
-   if(match==0){document.getElementById("display").innerHTML = "You don't have a "; document.getElementById("display").innerHTML = object; return;}
+   if(match==0){document.getElementById("result").innerHTML = "You don't have a " + object; return;}
    
    if(match==1){
     
-    if(itemLookup(object)!=u1){document.getElementById("display").innerHTML = "You can't use that here."; return;} 
+    if(itemLookup(object)!=u1){document.getElementById("result").innerHTML = "You can't use that here."; return;} 
     if(itemLookup(object)==u1){effectEngine(u2); return;}
   
    }
@@ -231,11 +271,11 @@ function interpret()
      /*******************************
             THE BIG ELSE
   *******************************/  
-    
-document.getElementById("display").innerHTML = "I don't understand "; //"I don't understand fuck, sorry."
-document.getElementById("display").innerHTML = action;
-document.getElementById("display").innerHTML = ", sorry.";
+
+var tempout = "I don't understand " + action + ", sorry.";    
+document.getElementById("result").innerHTML = tempout;
   return; 
+
 }
 
 
@@ -244,7 +284,7 @@ document.getElementById("display").innerHTML = ", sorry.";
          Scene Lookup
 *******************************/
 
-function getScene(int x, int y){
+function getScene(x, y){
   
   scene = scene_table[x][y];
   return;
@@ -257,10 +297,10 @@ function getScene(int x, int y){
 
 function itemLookup(obj){
  
- if(/*obj == " Card" || obj == " card" || obj == " Key Card" || obj == " key card" || obj == " KeyCard" || */obj == " Keycard"){delay(1000); return 'A';}
- if(obj == " Pintglass" /*|| obj == " Pint glass" || obj == " pint glass" || obj == " pintglass" || obj == " Pint Glass" || obj == " glass" || obj == " Glass"*/){delay(1000); return 'B';}
- if(obj == " Soldering Iron" || /*obj == " soldering iron" || obj == " Soldering iron" ||*/ obj == " Iron" || obj == " iron"){delay(1000); return 'C';}
- if(/*obj == " Redboard" || obj == " Red board" || */obj == " RedBoard"/* || obj == " Red Board" || obj == " board" || obj == " Board"*/){delay(1000); return 'D';}
+ if(obj == " Card" || obj == " card" || obj == " Key Card" || obj == " key card" || obj == " KeyCard" || obj == " Keycard" || obj == " keycard"){return 'A';}
+ if(obj == " Pintglass" || obj == " Pint glass" || obj == " pint glass" || obj == " pintglass" || obj == " Pint Glass" || obj == " glass" || obj == " Glass"){return 'B';}
+ if(obj == " Soldering Iron" || obj == " soldering iron" || obj == " Soldering iron" || obj == " Iron" || obj == " iron"){return 'C';}
+ if(obj == " Redboard" || obj == " Red board" || obj == " RedBoard" || obj == " Red Board" || obj == " board" || obj == " Board" || obj == "redboard"){return 'D';}
  if(obj == " Pen" || obj == " pen"){return 'E';}
  if(obj == " Beer" || obj == " beer"){return 'G';}
  
@@ -276,27 +316,27 @@ function effectEngine(effect){
  switch(effect){
    
   case 'A':
-  getText(0,1); document.getElementById("display").innerHTML = text; xco=2; yco=1; return;
+  getText(0,1); document.getElementById("result").innerHTML = text; xco=2; yco=1; return;
   break; 
   case 'B':
-  getText(0,2); document.getElementById("display").innerHTML = text; inventory.setCharAt(inventory.indexOf('B'), 'G'); document.getElementById("display").innerHTML = "Beer added to inventory"; return;
+  getText(0,2); document.getElementById("result").innerHTML = text; inventory = setCharAt(inventory, inventory.indexOf('B'), 'G'); document.getElementById("result").innerHTML = "Beer added to inventory"; return;
   break; 
   case 'C':
-  getText(1,0); document.getElementById("display").innerHTML = text; inventory.setCharAt(inventory.indexOf('x'), 'D'); document.getElementById("display").innerHTML = "Redboard added to inventory"; return;
+  getText(1,0); document.getElementById("result").innerHTML = text; inventory = setCharAt(inventory, inventory.indexOf('x'), 'D'); document.getElementById("result").innerHTML = "Redboard added to inventory"; return;
   break; 
   case 'D':
-  {getText(1,1); document.getElementById("display").innerHTML = text;
+  {getText(1,1); document.getElementById("result").innerHTML = text;
   var match = 0;
    
-  for(int q=0; q<=4; q++){if(inventory.charAt(q)=='E'){match=1;}}
+  for(q=0; q<=4; q++){if(inventory.charAt(q)=='E'){match=1;}}
    
-   if(match==0){getText(1,2); document.getElementById("display").innerHTML = text; escape();}
+   if(match==0){getText(1,2); document.getElementById("result").innerHTML = text; escape();}
    
-   if(match==1){getText(2,0); document.getElementById("display").innerHTML = text; escape();}
+   if(match==1){getText(2,0); document.getElementById("result").innerHTML = text; escape();}
   }
   break; 
   case 'G':
-  getText(2,1); document.getElementById("display").innerHTML = text; inventory.setCharAt(inventory.indexOf('x'), 'C'); document.getElementById("display").innerHTML = "Iron added to inventory"; return;
+  getText(2,1); document.getElementById("result").innerHTML = text; inventory = setCharAt(inventory, inventory.indexOf('x'), 'C'); document.getElementById("result").innerHTML = "Iron added to inventory"; return;
   break;
   
  }
@@ -306,10 +346,19 @@ function effectEngine(effect){
 /********************************
       In-Game Text Lookup
 ********************************/
-function getText(int x, int y){
+function getText(x, y){
   text = text_table[x][y];
   return;
 }
+
+/********************************
+ Strings are immutable in JS???
+********************************/
+function setCharAt(str,index,chr) {
+	if(index > str.length-1) return str;
+	return str.substr(0,index) + chr + str.substr(index+1);
+}
+
 
 </script>
 </body>
